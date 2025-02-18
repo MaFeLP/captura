@@ -1,3 +1,5 @@
+import logging
+
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
 
 import sys
@@ -47,6 +49,16 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%Y-%m-%dT%H:%M:%S",
+        stream=sys.stdout,
+        level="DEBUG",
+    )
+
+    logger = logging.getLogger(__name__)
+    logger.info("Starting Captura version %s" % "v0.0.1")
 
     window = MainWindow()
     window.show()
