@@ -1,9 +1,11 @@
 import logging
-
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
-
 import sys
+import tempfile
 from random import choice
+
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget
+
+from captura.ui.homepage import Homepage
 
 window_titles = [
     "My App",
@@ -60,7 +62,13 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Starting Captura version %s" % "v0.0.1")
 
-    window = MainWindow()
-    window.show()
+    main_window = MainWindow()
+    main_window.show()
 
-    app.exec()
+    try:
+        app.exec()
+    except Exception as e:
+        logger.critical("An unexpected error occurred", exc_info=e)
+    finally:
+        logger.debug(f"Cleaning up temporary directory '{tempdir.name}'")
+        tempdir.cleanup()
