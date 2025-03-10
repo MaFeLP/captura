@@ -33,8 +33,11 @@ class MainWindow(QMainWindow):
 
         self.windowTitleChanged.connect(self.the_window_title_changed)
 
+        self.central_widget = QWidget()
+        self.central_widget.setLayout(Homepage(self))
+
         # Set the central widget of the Window.
-        self.setCentralWidget(self.button)
+        self.setCentralWidget(self.central_widget)
 
     def the_button_was_clicked(self):
         print("Clicked.")
@@ -50,6 +53,10 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
+    global tempdir
+
+    tempdir = tempfile.TemporaryDirectory()
+
     app = QApplication(sys.argv)
 
     logging.basicConfig(
