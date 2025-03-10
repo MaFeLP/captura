@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QCheckBox, QHBoxLayout, QSizePolicy
+from PyQt6.QtCore import QSize, Qt
 
 class LCheckbox(QWidget):
     def __init__(self, label_text, parent=None):

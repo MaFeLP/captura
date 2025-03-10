@@ -1,7 +1,8 @@
 import sys
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QVBoxLayout, QCheckBox, QPushButton, QTextEdit, QComboBox
+from PyQt6 import QtGui
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QVBoxLayout, QCheckBox, QPushButton, QTextEdit, QComboBox, QSpacerItem
 from custom_widgets import LCheckbox
 
 app = QApplication(sys.argv)
@@ -35,7 +36,7 @@ class MainWindow(QMainWindow):
         self.Combobox1.addItems(['2', '4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'])
         pagelayout.addWidget(self.Combobox1)
         
-                
+     
         
         dummy_widget = QWidget()
         dummy_widget.setLayout(pagelayout)
