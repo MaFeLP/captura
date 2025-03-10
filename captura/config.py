@@ -9,7 +9,9 @@ def __validate_field(obj: dict, path: list[str], name: str, field_type: Type) ->
     if not name in obj:
         raise KeyError(f"Missing required field '{'.'.join(path)}.{name}'")
     if not isinstance(obj[name], field_type):
-        raise ValueError(f"Field '{'.'.join(path)}.{name}' must be a {field_type.__name__}")
+        raise ValueError(
+            f"Field '{'.'.join(path)}.{name}' must be a {field_type.__name__}"
+        )
 
 
 def __validate_section(section: dict) -> None:
