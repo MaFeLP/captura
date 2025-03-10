@@ -2,9 +2,9 @@ import logging
 from zipfile import ZipFile
 
 from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QFileDialog, QWidget
-from yaml import YAMLError, safe_load
+from yaml import YAMLError
 
-from captura import config
+from captura.template.library import load_new_template
 from captura.util import error_exit
 
 
@@ -29,12 +29,7 @@ class Homepage(QVBoxLayout):
         self.logger.debug("Opening file '%s'" % file_path)
 
         try:
-            self.archive = ZipFile(file_path, "r")
-            config_string = self.archive.read("config.yml")
-            yaml_config = safe_load(config_string)
-            self.logger.debug("Loaded template configuration")
-            config.validate(yaml_config)
-            self.logger.debug("Found configuration %s" % config_string)
+            load_new_template(file_path)
         except KeyError as err:
             error_exit(
                 self.parent, "Invalid template configuration", err, 1, self.logger
@@ -45,5 +40,5 @@ class Homepage(QVBoxLayout):
             )
         except ValueError as err:
             error_exit(
-                self.parent, "Invalid template configuration", err, 3, self.logger
+                self.parent, "Invalid template configuration", err, 1, self.logger
             )

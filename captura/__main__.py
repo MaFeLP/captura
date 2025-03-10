@@ -1,6 +1,5 @@
 import logging
 import sys
-import tempfile
 from random import choice
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget
@@ -53,10 +52,6 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    global tempdir
-
-    tempdir = tempfile.TemporaryDirectory()
-
     app = QApplication(sys.argv)
 
     logging.basicConfig(
@@ -76,6 +71,3 @@ if __name__ == "__main__":
         app.exec()
     except Exception as e:
         logger.critical("An unexpected error occurred", exc_info=e)
-    finally:
-        logger.debug(f"Cleaning up temporary directory '{tempdir.name}'")
-        tempdir.cleanup()
