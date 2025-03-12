@@ -1,9 +1,8 @@
 import sys
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
-from PyQt6 import QtGui
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QVBoxLayout, QCheckBox, QPushButton, QTextEdit, QComboBox, QSpacerItem
-from custom_widgets import LCheckbox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QComboBox
+from captura.ui.config_widgets.LCheckbox import LCheckbox
 
 app = QApplication(sys.argv)
 
