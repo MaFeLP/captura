@@ -110,11 +110,17 @@ class Config:
     tags: list[str]
     """The tags of the template"""
 
-    files: list[str]
+    files: list[str] | str
     """The files that the template should apply to"""
 
     sections: list[Section]
     """Sections for the wizard of the template"""
+
+    single_file: bool = False
+    """Whether the template is a single file template or a multi file template"""
+
+    assets: list[str] | None = None
+    """Assets of the template that will just be copied into the output directory. Needs 'single_file' to be False"""
 
     def get_directory(self) -> Path:
         """Get the directory where the template is stored
