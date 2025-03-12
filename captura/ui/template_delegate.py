@@ -8,8 +8,9 @@ from captura.config import Config
 
 
 class TemplateDelegate(QFrame):
+    # Preserve A4 Aspect Ratio for the preview image
     WIDTH = 180
-    HEIGHT = 270
+    HEIGHT = 300
 
     def __init__(
             self, parent: QWidget, config: Config, load_template: Callable[[Config], None]
@@ -23,11 +24,16 @@ class TemplateDelegate(QFrame):
         self.setFrameShadow(QFrame.Shadow.Raised)
 
         layout = QVBoxLayout()
-        pixmap = QPixmap("captura/ui/img/no_template_image.png")
-        widget = QLabel()
+
+        pixmap = (
+            QPixmap(str(config.get_directory() / "template.png"))
+            if (config.get_directory() / "template.png").exists()
+            else QPixmap("captura/ui/img/no_template_image.png")
+        )
+        widget = QLabel("Template Image")
         widget.setPixmap(pixmap)
         widget.setScaledContents(True)
-        widget.setFixedSize(self.WIDTH - 30, self.HEIGHT - 70)
+        widget.setFixedSize(self.WIDTH - 17, self.HEIGHT - 70)
         self.setFixedSize(self.WIDTH, self.HEIGHT)
 
         layout.addWidget(widget)

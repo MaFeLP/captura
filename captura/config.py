@@ -1,5 +1,7 @@
 import logging
+import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Type
 
 logger = logging.getLogger(__name__)
@@ -112,6 +114,20 @@ class Config:
 
     sections: list[Section]
     """Sections for the wizard of the template"""
+
+    def get_directory(self) -> Path:
+        """Get the directory where the template is stored
+
+        :return: The directory
+        """
+        template_directory = Path.home() / ".captura" / "templates"
+
+        # Change on linux to use the XDG Base Directory Specification
+        if sys.platform == "linux" or sys.platform == "linux2":
+            from xdg.BaseDirectory import xdg_data_dirs
+
+            template_directory = Path(xdg_data_dirs[0]) / "captura" / "templates"
+        return template_directory / f"{self.id}-{self.version}"
 
 
 def config_from_yaml(yaml: dict) -> Config:
