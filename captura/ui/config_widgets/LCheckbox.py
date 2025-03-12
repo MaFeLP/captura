@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QCheckBox, QHBoxLayout, QSizePolicy
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QWidget, QLabel, QCheckBox, QHBoxLayout
+
 
 class LCheckbox(QWidget):
     def __init__(self, label_text, parent=None):
         super().__init__(parent)
-        
+
         self.checkbox = QCheckBox()
         self.label = QLabel(label_text)
 
