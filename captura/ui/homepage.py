@@ -2,12 +2,11 @@ import logging
 import math
 
 from PyQt6.QtGui import QResizeEvent
-from PyQt6.QtWidgets import QFileDialog, QWidget, QGridLayout, QMessageBox
-from yaml import YAMLError
+from PyQt6.QtWidgets import QWidget, QGridLayout, QMessageBox
 
-from captura.template.library import load_new_template, get_library_templates
+from captura.template.library import get_library_templates
 from captura.ui.template_delegate import TemplateDelegate
-from captura.util import error_exit
+from captura.util import import_new_template
 
 
 class Homepage(QWidget):
@@ -17,14 +16,12 @@ class Homepage(QWidget):
         self.parent = parent
         self.logger = logging.getLogger(__name__)
         self.layout = QGridLayout()
-        self.library_templates = get_library_templates()
-        self.library_templates_widgets = [
-            TemplateDelegate(parent, config, lambda x: print(x))
-            for config in self.library_templates
-        ]
-        self.templates_per_row = math.floor(
-            self.size().width() / TemplateDelegate.WIDTH
-        )
+
+        # Library will be initialized in self.load_templates()
+        self.library_templates = []
+        self.library_templates_widgets = []
+        self.templates_per_row = 0
+        self.load_templates()
 
         if len(self.library_templates) == 0:
             dialog = QMessageBox.question(
@@ -35,11 +32,25 @@ class Homepage(QWidget):
             )
 
             if dialog == QMessageBox.StandardButton.Yes:
-                self.on_select_file()
+                import_new_template(parent, self.reload, self.logger)
 
             return
 
         self.create_layout()
+
+    def reload(self):
+        self.load_templates()
+        self.create_layout()
+
+    def load_templates(self):
+        self.library_templates = get_library_templates()
+        self.library_templates_widgets = [
+            TemplateDelegate(self.parent, config, lambda x: print(x))
+            for config in self.library_templates
+        ]
+        self.templates_per_row = math.floor(
+            self.size().width() / TemplateDelegate.WIDTH
+        )
 
     def create_layout(self, templates_per_row: int = 3):
         idx, idy = 0, 0
@@ -63,24 +74,3 @@ class Homepage(QWidget):
         self.create_layout(templates_per_row)
         self.templates_per_row = templates_per_row
         event.accept()
-
-    def on_select_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            filter="Captura Vorlagen (*.captura);; ZIP-Dateien (*.zip);; Alle Dateien (*)",
-        )
-
-        if not file_path:
-            return
-
-        self.logger.debug("Opening file '%s'" % file_path)
-
-        try:
-            load_new_template(file_path)
-        except (KeyError, ValueError) as err:
-            error_exit(
-                self.parent, "Invalid template configuration", err, 1, self.logger
-            )
-        except YAMLError as err:
-            error_exit(
-                self.parent, "Error parsing the configuration", err, 2, self.logger
-            )
