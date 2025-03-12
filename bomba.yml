@@ -1,0 +1,56 @@
+name: "Test_Footer/Header"
+description: "Test, aber eigentlich Footer/Header"
+id: "com.github.mafelp.test_footer/header"
+version: "0.1.0"
+author: "MaFeLP <mafelp@proton.me>"
+license: "CC0"
+tags: ["test"]
+
+files:
+  - "index.tex"
+
+sections:
+  - name: "General Information"
+    description: "General information about the document"
+    fields:
+      - id: "author"  
+        label: "Autor:"
+        type: "text"
+
+      - id: "title"
+        label: "Titel:"
+        type: "text"
+
+      - id: "date"
+        label: "Datum:"
+        type: "text"
+
+  - name: "Header"
+    description: "Information to be displayed in the header"
+    fields:
+      - id: "header_left"
+        label: "Oben links:"
+        type: "text"
+      
+      - id: "header_center"
+        label: "Oben mittig:"
+        type: "text"
+
+      - id: "header_right"  
+        label: "Oben rechts:"
+        type: "text"
+  
+  - name: "Footer"
+    description: "Information to be displayed in the footer"
+    fields:
+      - id: "footer_left"
+        label: "Unten links:"
+        type: "text"
+      
+      - id: "footer_center"
+        label: "Unten mittig:"
+        type: "text"
+
+      - id: "footer_right"  
+        label: "Unten rechts:"
+        type: "text"

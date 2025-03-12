@@ -2,6 +2,7 @@ import logging
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from string import ascii_letters, digits
 from typing import Type
 
 logger = logging.getLogger(__name__)
@@ -16,17 +17,17 @@ def __validate_field(obj: dict, path: list[str], name: str, field_type: Type) ->
         )
 
 
-def __validate_section(section: dict) -> None:
+def __validate_section(section: dict, section_idx) -> None:
     __validate_field(section, ["sections"], "name", str)
     __validate_field(section, ["sections"], "description", str)
     __validate_field(section, ["sections"], "fields", list)
 
     for idx, field in enumerate(section["fields"]):
-        __validate_field(field, ["sections", f"[{idx}]"], "id", str)
-        __validate_field(field, ["sections", f"[{idx}]"], "label", str)
-        __validate_field(field, ["sections", f"[{idx}]"], "type", str)
+        __validate_field(field, [f"sections[{section_idx}]", f"fields[{idx}]"], "id", str)
+        __validate_field(field, [f"sections[{section_idx}]", f"fields[{idx}]"], "label", str)
+        __validate_field(field, [f"sections[{section_idx}]", f"fields[{idx}]"], "type", str)
         for char in field["id"]:
-            if not char.isalnum():
+            if char not in ascii_letters + digits + "_":
                 raise ValueError(
                     f"Field 'sections.[{idx}].id' contains invalid characters"
                 )
@@ -51,8 +52,8 @@ def validate(config: dict) -> None:
     for l in ["files", "tags", "sections"]:
         __validate_field(config, [], l, list)
 
-    for section in config["sections"]:
-        __validate_section(section)
+    for idx, section in enumerate(config["sections"]):
+        __validate_section(section, idx)
     logger.info(f"Found valid configuration '{config['id']}-{config['version']}'")
 
 
@@ -69,6 +70,12 @@ class Field:
     type: str
     """The type of the field, can be 'text', 'checkbox' or 'select'"""
 
+    default: str = ""
+    """The default value of the field"""
+
+    when: str = ""
+    """The condition for the field to be shown"""
+
 
 @dataclass
 class Section:
@@ -82,6 +89,7 @@ class Section:
 
     fields: list[Field]
     """The fields of the section"""
+
 
 
 @dataclass
