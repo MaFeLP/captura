@@ -1,5 +1,7 @@
 import logging
+import math
 
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QFileDialog, QWidget, QGridLayout, QMessageBox
 from yaml import YAMLError
 
@@ -15,10 +17,16 @@ class Homepage(QWidget):
         self.parent = parent
         self.logger = logging.getLogger(__name__)
         self.layout = QGridLayout()
-        # self.setMinimumSize(540, 640)
-        library_templates = get_library_templates()
+        self.library_templates = get_library_templates()
+        self.library_templates_widgets = [
+            TemplateDelegate(parent, config, lambda x: print(x))
+            for config in self.library_templates
+        ]
+        self.templates_per_row = math.floor(
+            self.size().width() / TemplateDelegate.WIDTH
+        )
 
-        if len(library_templates) == 0:
+        if len(self.library_templates) == 0:
             dialog = QMessageBox.question(
                 self.parent,
                 "Leere Bibliothek",
@@ -31,17 +39,30 @@ class Homepage(QWidget):
 
             return
 
+        self.create_layout()
+
+    def create_layout(self, templates_per_row: int = 3):
         idx, idy = 0, 0
-        for template in library_templates:
-            self.layout.addWidget(
-                TemplateDelegate(self.parent, template, lambda x: print(x)), idy, idx
-            )
+        for template in self.library_templates_widgets:
+            self.layout.removeWidget(template)
+            self.layout.addWidget(template, idy, idx)
             idx += 1
-            if idx >= 3:
+            if idx >= templates_per_row:
                 idx = 0
                 idy += 1
 
         self.setLayout(self.layout)
+
+    def resizeEvent(self, event: QResizeEvent):
+        templates_per_row = math.floor(event.size().width() / TemplateDelegate.WIDTH)
+
+        if self.templates_per_row == templates_per_row:
+            event.accept()
+            return
+
+        self.create_layout(templates_per_row)
+        self.templates_per_row = templates_per_row
+        event.accept()
 
     def on_select_file(self):
         file_path, _ = QFileDialog.getOpenFileName(

@@ -8,6 +8,9 @@ from captura.config import Config
 
 
 class TemplateDelegate(QFrame):
+    WIDTH = 180
+    HEIGHT = 270
+
     def __init__(
             self, parent: QWidget, config: Config, load_template: Callable[[Config], None]
     ):
@@ -24,8 +27,8 @@ class TemplateDelegate(QFrame):
         widget = QLabel()
         widget.setPixmap(pixmap)
         widget.setScaledContents(True)
-        widget.setFixedSize(150, 200)
-        self.setFixedSize(180, 270)
+        widget.setFixedSize(self.WIDTH - 30, self.HEIGHT - 70)
+        self.setFixedSize(self.WIDTH, self.HEIGHT)
 
         layout.addWidget(widget)
         layout.addWidget(QLabel(config.name))
