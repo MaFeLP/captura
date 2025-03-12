@@ -5,7 +5,7 @@ from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QWidget, QGridLayout, QMessageBox
 
 from captura.template.library import get_library_templates
-from captura.ui.template_delegate import TemplateDelegate
+from captura.ui.TemplateDelegate import TemplateDelegate
 from captura.util import import_new_template
 
 

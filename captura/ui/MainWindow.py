@@ -2,9 +2,9 @@ import logging
 
 from PyQt6.QtWidgets import QMainWindow, QWidget
 
+from captura.ui.Homepage import Homepage
 from captura.ui.MainScrollArea import MainScrollArea
 from captura.ui.Menubar import Menubar
-from captura.ui.homepage import Homepage
 
 logger = logging.getLogger(__name__)
 
