@@ -1,32 +1,9 @@
 import logging
 import sys
 
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QApplication
 
-from captura.ui.MainScrollArea import MainScrollArea
-from captura.ui.homepage import Homepage
-
-
-def scroll_area_resize_event(self, event):
-    self.widget().resize(event.size().width(), event.size().height())
-    logger.debug(
-        f"Resizing scroll area to {event.size().width()}x{event.size().height()}"
-    )
-    event.accept()
-
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle("Captura")
-        self.setMinimumSize(600, 400)
-        self.resize(800, 600)
-
-        self.homepage = Homepage(self)
-        self.scroll_area = MainScrollArea(self.homepage)
-        self.setCentralWidget(self.scroll_area)
-
+from captura.ui.MainWindow import MainWindow
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
