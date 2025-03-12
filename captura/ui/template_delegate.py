@@ -1,7 +1,8 @@
 from typing import Callable
 
-from PyQt6.QtGui import QMouseEvent, QPixmap
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QFrame
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QMouseEvent, QPixmap, QEnterEvent
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QFrame, QApplication
 
 from captura.config import Config
 
@@ -34,3 +35,11 @@ class TemplateDelegate(QFrame):
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         self.load_template(self.config)
+
+    def enterEvent(self, event: QEnterEvent):
+        QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
+        self.setFrameShadow(QFrame.Shadow.Plain)
+
+    def leaveEvent(self, _):
+        QApplication.setOverrideCursor(Qt.CursorShape.ArrowCursor)
+        self.setFrameShadow(QFrame.Shadow.Raised)

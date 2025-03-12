@@ -49,10 +49,9 @@ def validate(config: dict) -> None:
     for l in ["files", "tags", "sections"]:
         __validate_field(config, [], l, list)
 
-    logger.debug("Top Level fields are valid")
-
     for section in config["sections"]:
         __validate_section(section)
+    logger.info(f"Found valid configuration '{config['id']}-{config['version']}'")
 
 
 @dataclass
