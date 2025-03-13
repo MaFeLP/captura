@@ -64,7 +64,8 @@ class Homepage(QWidget):
             if idx >= templates_per_row:
                 idx = 0
                 idy += 1
-
+        self.layout.setRowStretch(templates_per_row, 1)
+        self.layout.setColumnStretch(idy + 1, 1)
         self.setLayout(self.layout)
 
     def resizeEvent(self, event: QResizeEvent):
