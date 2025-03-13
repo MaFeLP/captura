@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+from string import ascii_letters, digits
 from typing import Type
 
 from captura.environment import template_directory
@@ -27,7 +28,7 @@ def __validate_section(section: dict) -> None:
         __validate_field(field, ["sections", f"[{idx}]"], "label", str)
         __validate_field(field, ["sections", f"[{idx}]"], "type", str)
         for char in field["id"]:
-            if not char.isalnum():
+            if char not in ascii_letters + digits + "_":
                 raise ValueError(
                     f"Field 'sections.[{idx}].id' contains invalid characters"
                 )
