@@ -43,7 +43,7 @@ def render_all(path: Path, config: Config, values: dict) -> None:
         assert type(config.files) == str, "Single file must be a string"
         logger.debug(f"Rendering single file {config.files}...")
         string = env.get_template(config.files).render(values)
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             f.write(string)
         return
 
@@ -52,7 +52,7 @@ def render_all(path: Path, config: Config, values: dict) -> None:
     for file in config.files:
         logger.debug(f"Rendering file {file}...")
         string = env.get_template(file).render(values)
-        with open(path / file, 'w') as f:
+        with open(path / file, "w") as f:
             f.write(string)
     if config.assets:
         logger.debug("Copying assets...")

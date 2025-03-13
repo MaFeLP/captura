@@ -40,7 +40,9 @@ class MainWindow(QMainWindow):
         }
 
         if config.single_file:
-            path = QFileDialog.getSaveFileName(self, "Speichern unter...", filter="Tex Dateien")
+            path = QFileDialog.getSaveFileName(
+                self, "Speichern unter...", filter="Tex Dateien"
+            )
             if not path[0]:
                 return
         else:
