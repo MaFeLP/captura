@@ -1,0 +1,46 @@
+name: "MLA Essay"
+description: "Essay styled after the style guides from the Modern Language Association"
+id: "com.github.mafelp.mla_essay"
+version: "1.0.0"
+author: "MaFeLP <mafelp@proton.me>"
+license: "CC0"
+tags: [ "mla", "essay" ]
+
+files:
+  - "essay.tex"
+  - "essay.bib"
+
+sections:
+  - name: "General Information"
+    description: "General information about the document"
+    fields:
+      - id: "author_first_name"
+        label: "First name(s) of author"
+        type: "text"
+      - id: "author_last_name"
+        label: "Last name of author"
+        type: "text"
+      - id: "title"
+        label: "Title"
+        type: "text"
+      - id: "deadline_today"
+        label: "Use today as deadline?"
+        type: "checkbox"
+      - id: "deadline_date"
+        label: "Deadline"
+        type: "text"
+
+      - id: "professor"
+        label: "Professor"
+        type: "text"
+      - id: "course"
+        label: "Course Name"
+        type: "text"
+
+#      - id: "subjects"
+#        label: "Subject"
+#        type: "list"
+#      - id: "keywords"
+#        label: "Keywords"
+#        type: "list"
+
