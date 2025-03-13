@@ -1,7 +1,8 @@
 import logging
 from pathlib import Path
 
-from PyQt6.QtWidgets import QMainWindow, QFileDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QMainWindow, QFileDialog, QApplication
 
 from captura.config import Config
 from captura.template.renderer import render_all
@@ -28,6 +29,7 @@ class MainWindow(QMainWindow):
         self.setMenuBar(Menubar(self))
 
     def navigate_to_wizard(self, config: Config):
+        QApplication.setOverrideCursor(Qt.CursorShape.ArrowCursor)
         wizard = Wizard(self, config)
         self.scroll_area.setWidget(wizard)
 
