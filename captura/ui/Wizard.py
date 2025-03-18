@@ -21,8 +21,35 @@ class Wizard(QWidget):
         self.title_label.setStyleSheet("font-size: 20px")
         pagelayout.addWidget(self.title_label)
         
-        self.test_labellol = QLabel(config.sections[0]["fields"][0]["id"])
-        pagelayout.addWidget(self.test_labellol)
+        
+        
+        for section in config.sections:
+            section_label = QLabel(section["name"])
+            pagelayout.addWidget(section_label)
+            
+            for field in section["fields"]:
+                if field["type"] == "text":
+                    field_widget = QLineEdit()
+                    field_widget.setPlaceholderText(field["label"])
+                    field_widget.textChanged.connect(lambda text: self.state.__setitem__(field["id"], text))
+                    debug_label = QLabel(str(self.state))
+                    pagelayout.addWidget(debug_label)
+                    pagelayout.addWidget(field_widget)
+                    
+                
+                elif field["type"] == "checkbox":
+                    field_widget = LCheckbox(field["label"])
+                    field_widget.stateChanged.connect(lambda state: self.state.__setitem__(field["id"], state))
+                    pagelayout.addWidget(field_widget)
+                    
+                elif field["type"] == "combobox":
+                    field_widget = QComboBox(field["label"])
+                    field_widget.addItems("test7")
+                    field_widget.currentTextChanged.connect(lambda text: self.state.__setitem__(field["id"], text))
+                    pagelayout.addWidget(field_widget)
+        self.test_label_state = QLabel(str(self.state))
+        pagelayout.addWidget(self.test_label_state)
+       
   #      for section in config.sections:
    #         section_label = QLabel(section.name)
     #        pagelayout.addWidget(section_label)
@@ -41,9 +68,3 @@ class Wizard(QWidget):
         self.setLayout(pagelayout)
         
 
-
-    def update_checkbox_state(self, state):
-        self.checkbox1_state = (
-                state == Qt.CheckState.Checked.value
-        )  # Convert state properly
-        print(f"Updated state: {self.checkbox1_state}")  # Debug print

@@ -54,3 +54,14 @@ sections:
       - id: "footer_right"  
         label: "Unten rechts:"
         type: "text"
+    
+  - name: "Test1"
+    description: "nur zu testen, bitte entfernen"
+    fields:
+      - id: "test1"
+        label: "test_checkbox"
+        type: "checkbox"
+      
+      - id: "test2"
+        label: "test_combobox"
+        type: "combobox"
