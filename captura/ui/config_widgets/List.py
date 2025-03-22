@@ -15,15 +15,14 @@ class List(QWidget):
         self.button.clicked.connect(self.add_item)
         self.lineedit.textChanged.connect(self.on_text_changed)
         
-        widgetlayout = QVBoxLayout()
-        self.second_layout = QHBoxLayout()
-        widgetlayout.addWidget(self.label)
-        widgetlayout.addLayout(self.second_layout)
-        self.second_layout.addWidget(self.button)
-        self.second_layout.addWidget(self.lineedit)
+        self.widgetlayout = QVBoxLayout()
+        self.widgetlayout.addWidget(self.label)
+        self.widgetlayout.addWidget(self.button)
+        self.widgetlayout.addWidget(self.lineedit)
+    
         
 
-        self.setLayout(widgetlayout)
+        self.setLayout(self.widgetlayout)
 
     def update_state(self, index: int, value: str):
         self.state[index] = value
@@ -32,7 +31,7 @@ class List(QWidget):
     def add_item(self):
         self.state.append("")
         field = {"id": len(self.state) - 1, "label": ""}
-        self.second_layout.addWidget(LineEdit(field, self.update_state, self))
+        self.widgetlayout.addWidget(LineEdit(field, self.update_state, self))
     
     def on_text_changed(self, text: str):
         self.update_state(0, text)

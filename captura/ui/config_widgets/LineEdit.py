@@ -6,7 +6,7 @@ class LineEdit(QLineEdit):
         super().__init__(parent)
         
         self.id = field["id"]
-        self.placeholderText = field["label"]
+        self.setPlaceholderText(field["label"])
         self.state = change_state
         
         self.textChanged.connect(self.on_text_changed)

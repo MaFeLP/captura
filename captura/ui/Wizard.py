@@ -10,7 +10,7 @@ class Wizard(QWidget):
     def __init__(self, parent: QWidget, config: Config):
         super().__init__(parent)
         parent.setWindowTitle(f"Template: {config.name}")
-
+        
         pagelayout = QVBoxLayout()
         pagelayout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         pagelayout.setContentsMargins(0, 0, 0, 0)
@@ -20,12 +20,14 @@ class Wizard(QWidget):
         
         self.title_label = QLabel(config.name)
         self.title_label.setStyleSheet("font-size: 20px")
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         pagelayout.addWidget(self.title_label)
         
         
         
         for section in config.sections:
             section_label = QLabel(section["name"])
+            section_label.setStyleSheet("font-size: 16px") 
             pagelayout.addWidget(section_label)
             
             for field in section["fields"]:
