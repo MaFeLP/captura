@@ -1,15 +1,14 @@
 import logging
-from pathlib import Path
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QMainWindow, QFileDialog, QApplication
+from PyQt6.QtWidgets import QMainWindow, QApplication
 
 from captura.config import Config
-from captura.template.renderer import render_all
 from captura.ui.Homepage import Homepage
 from captura.ui.MainScrollArea import MainScrollArea
 from captura.ui.Menubar import Menubar
 from captura.ui.Wizard import Wizard
+from captura.ui.dialog.FinalizeRenderDialog import FinalizeRenderDialog
 
 logger = logging.getLogger(__name__)
 
@@ -30,23 +29,9 @@ class MainWindow(QMainWindow):
 
     def navigate_to_wizard(self, config: Config):
         QApplication.setOverrideCursor(Qt.CursorShape.ArrowCursor)
-        wizard = Wizard(self, config)
+        wizard = Wizard(self, config, self.goto_render)
         self.scroll_area.setWidget(wizard)
 
-    def goto_render(self, config):
-        values = {
-            "title": "Titel",
-            "author": "Autor",
-        }
-
-        if config.single_file:
-            path = QFileDialog.getSaveFileName(
-                self, "Speichern unter...", filter="Tex Dateien"
-            )
-            if not path[0]:
-                return
-        else:
-            path = QFileDialog.getExistingDirectory(self, "Speichern unter...")
-            if not path:
-                return
-        render_all(Path(path), config, values)
+    def goto_render(self, config: Config, state: dict):
+        dialog = FinalizeRenderDialog(self, config, state)
+        dialog.show()
