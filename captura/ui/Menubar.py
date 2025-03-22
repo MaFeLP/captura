@@ -3,6 +3,7 @@ import logging
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import QMenuBar, QApplication, QWidget, QMessageBox
 
+from captura.ui.dialog.AboutDialog import AboutDialog
 from captura.util import import_new_template
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class Menubar(QMenuBar):
 
         about_action = QAction("&About", self)
         about_action.setStatusTip("Über Captura")
-        about_action.triggered.connect(self.__not_implemented)
+        about_action.triggered.connect(lambda: AboutDialog(self.parent).show())
         help_menu.addAction(about_action)
 
     def __file_menu(self):
