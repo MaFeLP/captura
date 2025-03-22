@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 
 class Wizard(QWidget):
     def __init__(
-            self,
-            parent: QWidget,
-            config: Config,
-            goto_render: Callable[[Config, dict], None],
+        self,
+        parent: QWidget,
+        config: Config,
+        goto_render: Callable[[Config, dict], None],
     ):
         super().__init__(parent)
         parent.setWindowTitle(f"Template: {config.name}")
