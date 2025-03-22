@@ -50,17 +50,21 @@ def get_library_templates() -> list[Config]:
     :return: A list of tuples with the template id and name
     """
     out = []
+    logger.debug("Getting templates from library")
     for template in template_directory.iterdir():
+        logger.debug(f"Checking template '{template}'")
         if template.is_dir():
             if not (template / "config.yml").exists():
                 logger.error(f"Template '{template}' has no configuration, skipping...")
                 continue
             try:
+                logger.debug(f"Reading configuration for template '{template}'")
                 with open(template / "config.yml", "r") as file:
                     out.append(config_from_yaml(safe_load(file.read())))
-            except (KeyError, ValueError, TypeError, YAMLError):
+            except (KeyError, ValueError, TypeError, YAMLError) as e:
                 logger.error(
                     f"Template '{template}' has an invalid configuration, skipping..."
                 )
+                logger.error(e)
                 continue
     return out

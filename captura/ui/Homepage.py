@@ -46,7 +46,11 @@ class Homepage(QWidget):
         self.create_layout()
 
     def load_templates(self):
-        self.library_templates = get_library_templates()
+        self.library_templates = []
+        try:
+            self.library_templates = get_library_templates()
+        except Exception as e:
+            self.logger.error(f"Error loading templates: {e}")
         self.library_templates_widgets = [
             TemplateDelegate(self.parent, config, self.navigate_to_wizard)
             for config in self.library_templates

@@ -5,6 +5,7 @@ from PyQt6.QtGui import QMouseEvent, QPixmap, QEnterEvent
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QFrame, QApplication
 
 from captura.config import Config
+import os
 
 
 class TemplateDelegate(QFrame):
@@ -13,7 +14,7 @@ class TemplateDelegate(QFrame):
     HEIGHT = 300
 
     def __init__(
-            self, parent: QWidget, config: Config, load_template: Callable[[Config], None]
+        self, parent: QWidget, config: Config, load_template: Callable[[Config], None]
     ):
         super().__init__()
         self.parent = parent
@@ -28,8 +29,9 @@ class TemplateDelegate(QFrame):
         pixmap = (
             QPixmap(str(config.get_directory() / "template.png"))
             if (config.get_directory() / "template.png").exists()
-            else QPixmap("captura/ui/img/no_template_image.png")
+            else QPixmap(f"{os.path.dirname(__file__)}/assets/no_template_image.png")
         )
+        print(f"{os.path.dirname(__file__)=}")
         widget = QLabel("Template Image")
         widget.setPixmap(pixmap)
         widget.setScaledContents(True)

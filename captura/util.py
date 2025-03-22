@@ -9,7 +9,7 @@ from captura.template.library import load_new_template
 
 
 def error_exit(
-        parent: QWidget, msg: str, e: Exception, exit_code: int, logger: logging.Logger
+    parent: QWidget, msg: str, e: Exception, exit_code: int, logger: logging.Logger
 ):
     logger.critical(msg, exc_info=e)
     QMessageBox.critical(parent, "Error", msg + f"\n\n{e}")
@@ -17,7 +17,7 @@ def error_exit(
 
 
 def import_new_template(
-        parent: QWidget, reload_homepage: Callable[[], None], logger: logging.Logger
+    parent: QWidget, reload_homepage: Callable[[], None], logger: logging.Logger
 ):
     file_path, _ = QFileDialog.getOpenFileName(
         filter="Captura Vorlagen (*.captura);; ZIP-Dateien (*.zip);; Alle Dateien (*)",

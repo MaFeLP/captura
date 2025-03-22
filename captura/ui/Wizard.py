@@ -1,8 +1,10 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QComboBox
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QLineEdit
 
 from captura.config import Config
 from captura.ui.config_widgets.LCheckbox import LCheckbox
+from captura.ui.config_widgets.LineEdit import LineEdit
+from captura.ui.config_widgets.List import List
 
 
 class Wizard(QWidget):
@@ -15,26 +17,35 @@ class Wizard(QWidget):
         pagelayout.setContentsMargins(0, 0, 0, 0)
         pagelayout.setSpacing(10)
 
-        self.checkbox1_state = False
+        self.state = {}
 
-        self.checkbox1 = LCheckbox("Titelseite")
-        self.checkbox1.checkbox.stateChanged.connect(self.update_checkbox_state)
-        pagelayout.addWidget(self.checkbox1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.title_label = QLabel(config.name)
+        self.title_label.setStyleSheet("font-size: 20px")
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        pagelayout.addWidget(self.title_label)
 
-        self.checkbox2 = LCheckbox("Inhaltsverzeichnis")
-        pagelayout.addWidget(self.checkbox2, alignment=Qt.AlignmentFlag.AlignCenter)
+        for section in config.sections:
+            section_label = QLabel(section["name"])
+            section_label.setStyleSheet("font-size: 16px")
+            pagelayout.addWidget(section_label)
 
-        self.Combobox1 = QComboBox()
-        self.Combobox1.addItems(
-            ["2", "4", "6", "8", "10", "12", "14", "16", "18", "20", "22", "24"]
-        )
-        pagelayout.addWidget(self.Combobox1)
+            for field in section["fields"]:
+                if field["type"] == "text":
+                    field_widget = LineEdit(field, self.change_state, self)
+                    pagelayout.addWidget(field_widget)
+
+                elif field["type"] == "checkbox":
+                    field_widget = LCheckbox(field, self.change_state, self)
+                    pagelayout.addWidget(field_widget)
+
+                elif field["type"] == "list":
+                    field_widget = List(field, self.change_state, self)
+                    pagelayout.addWidget(field_widget)
+
         pagelayout.addStretch()
 
         self.setLayout(pagelayout)
 
-    def update_checkbox_state(self, state):
-        self.checkbox1_state = (
-                state == Qt.CheckState.Checked.value
-        )  # Convert state properly
-        print(f"Updated state: {self.checkbox1_state}")  # Debug print
+    def change_state(self, id: str, value: any):
+        self.state[id] = value
+        print(self.state)
