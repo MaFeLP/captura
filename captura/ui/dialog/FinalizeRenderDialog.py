@@ -2,6 +2,8 @@ import logging
 import os
 import subprocess
 import sys
+import tempfile
+import zipfile
 from pathlib import Path
 
 from PyQt6.QtGui import QFont
@@ -81,13 +83,35 @@ class FinalizeRenderDialog(QDialog):
 
     def accept(self):
         logger.debug(f"Saving to file path: {self.path.text()}")
-        try:
-            render_all(Path(self.path.text()), self.config, self.values)
-        except Exception as e:
-            logger.exception(f"Failed to render template", exc_info=e)
-            QMessageBox.warning(self.parentWidget(), "Fehler", str(e))
-            super().reject()
+
+        if not self.path.text():
+            QMessageBox.warning(
+                self.parentWidget(), "Fehler", "Bitte wählen Sie einen Speicherort aus!"
+            )
             return
+
+        path = Path(self.path.text())
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            if self.zip_checkbox_checked:
+                if self.config.single_file:
+                    path = Path(tmpdir) / f"{path.name}.tex"
+                else:
+                    path = Path(tmpdir)
+
+            try:
+                render_all(path, self.config, self.values)
+            except Exception as e:
+                logger.exception(f"Failed to render template", exc_info=e)
+                QMessageBox.warning(self.parentWidget(), "Fehler", str(e))
+                super().reject()
+                return
+
+            if self.zip_checkbox_checked:
+                with zipfile.ZipFile(Path(self.path.text()), "w") as zip_file:
+                    for root, dirs, files in os.walk(tmpdir):
+                        for file in files:
+                            zip_file.write(os.path.join(root, file), file)
 
         super().accept()
         self.parent.close()
@@ -114,11 +138,8 @@ class FinalizeRenderDialog(QDialog):
                 filetype_filter = "ZIP Dateien (*.zip);;Alle Dateien (*)"
             path = QFileDialog.getSaveFileName(
                 self, "Datei Speichern unter...", filter=filetype_filter
-            )
-            if not path[0]:
-                return
+            )[0]
         else:
             path = QFileDialog.getExistingDirectory(self, "Ordner Speichern unter...")
-            if not path:
-                return
-        self.path.setText(path)
+        if path:
+            self.path.setText(path)
