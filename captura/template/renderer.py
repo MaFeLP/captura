@@ -48,9 +48,9 @@ def render_all(path: Path, config: Config, values: dict) -> None:
     )
 
     if config.single_file:
-        assert type(config.files) == str, "Single file must be a string"
-        logger.debug(f"Rendering single file {config.files}...")
-        string = env.get_template(config.files).render(values)
+        assert type(config.files[0]) == str, "Single file must be a string"
+        logger.debug(f"Rendering single file {config.files[0]}...")
+        string = env.get_template(config.files[0]).render(values)
         with open(path, "w") as f:
             f.write(string)
         return
