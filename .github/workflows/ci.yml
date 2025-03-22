@@ -33,7 +33,8 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
           cache-version: 0
+          working-directory: ./docs
 
       - name: Build with Jekyll
+        working-directory: ./docs
         run: bundle exec jekyll build
-
