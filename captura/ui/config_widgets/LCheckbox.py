@@ -1,10 +1,13 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QCheckBox, QHBoxLayout
 from typing import Callable
 
+
 class LCheckbox(QWidget):
-    def __init__(self, field: dict, change_state: Callable[[str, bool], None], parent=None):
+    def __init__(
+        self, field: dict, change_state: Callable[[str, bool], None], parent=None
+    ):
         super().__init__(parent)
-        
+
         self.id = field["id"]
         self.change_state = change_state
 
@@ -15,9 +18,7 @@ class LCheckbox(QWidget):
         layout = QHBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.checkbox)
-        
 
-        
         layout.addSpacing(600)
         self.setLayout(layout)
 

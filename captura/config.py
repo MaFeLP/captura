@@ -23,9 +23,15 @@ def __validate_section(section: dict, section_idx) -> None:
     __validate_field(section, ["sections"], "fields", list)
 
     for idx, field in enumerate(section["fields"]):
-        __validate_field(field, [f"sections[{section_idx}]", f"fields[{idx}]"], "id", str)
-        __validate_field(field, [f"sections[{section_idx}]", f"fields[{idx}]"], "label", str)
-        __validate_field(field, [f"sections[{section_idx}]", f"fields[{idx}]"], "type", str)
+        __validate_field(
+            field, [f"sections[{section_idx}]", f"fields[{idx}]"], "id", str
+        )
+        __validate_field(
+            field, [f"sections[{section_idx}]", f"fields[{idx}]"], "label", str
+        )
+        __validate_field(
+            field, [f"sections[{section_idx}]", f"fields[{idx}]"], "type", str
+        )
         for char in field["id"]:
             if char not in ascii_letters + digits + "_":
                 raise ValueError(
@@ -89,7 +95,6 @@ class Section:
 
     fields: list[Field]
     """The fields of the section"""
-
 
 
 @dataclass

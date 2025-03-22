@@ -21,7 +21,8 @@ class MainWindow(QMainWindow):
     def show_state(self, s):
         print(s == Qt.CheckState.Checked.value)
         print(s)
-        
+
+
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
