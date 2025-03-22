@@ -22,11 +22,19 @@ SPECIAL_CHARACTERS = [
 ]
 
 
-def sanitize_values(values: dict) -> dict:
-    for key, value in values.items():
+def sanitize_single_value(value: any) -> any:
+    if type(value) == str:
         for char, replacement in SPECIAL_CHARACTERS:
             value = value.replace(char, replacement)
-        values[key] = value
+    elif type(value) == list:
+        for idx, item in enumerate(value):
+            value[idx] = sanitize_single_value(item)
+    return value
+
+
+def sanitize_values(values: dict) -> dict:
+    for key, value in values.items():
+        values[key] = sanitize_single_value(value)
     return values
 
 
