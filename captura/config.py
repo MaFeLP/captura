@@ -31,7 +31,7 @@ def __validate_section(section: dict, section_idx) -> None:
                 raise ValueError(
                     f"Field 'sections.[{idx}].id' contains invalid characters"
                 )
-        if not field["type"] in ["text", "checkbox", "select"]:
+        if not field["type"] in ["text", "checkbox", "select", "list"]:
             raise ValueError(
                 f"Field 'sections.[{idx}].type' has incorrect type '{field['type']}'"
             )

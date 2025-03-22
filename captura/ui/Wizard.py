@@ -3,7 +3,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QComboBox, QLabel, QLineEdit
 
 from captura.config import Config
 from captura.ui.config_widgets.LCheckbox import LCheckbox
-
+from captura.ui.config_widgets.LineEdit import LineEdit
+from captura.ui.config_widgets.List import List
 
 class Wizard(QWidget):
     def __init__(self, parent: QWidget, config: Config):
@@ -29,42 +30,21 @@ class Wizard(QWidget):
             
             for field in section["fields"]:
                 if field["type"] == "text":
-                    field_widget = QLineEdit()
-                    field_widget.setPlaceholderText(field["label"])
-                    field_widget.textChanged.connect(lambda text: self.state.__setitem__(field["id"], text))
-                    debug_label = QLabel(str(self.state))
-                    pagelayout.addWidget(debug_label)
+                    field_widget = LineEdit(field, self.change_state, self)
                     pagelayout.addWidget(field_widget)
                     
                 
                 elif field["type"] == "checkbox":
-                    field_widget = LCheckbox(field["label"])
-                    field_widget.stateChanged.connect(lambda state: self.state.__setitem__(field["id"], state))
+                    field_widget = LCheckbox(field, self.change_state, self)
+                    pagelayout.addWidget(field_widget)
+                
+                elif field["type"] == "list":
+                    field_widget = List(field, self.change_state, self)
                     pagelayout.addWidget(field_widget)
                     
-                elif field["type"] == "combobox":
-                    field_widget = QComboBox(field["label"])
-                    field_widget.addItems("test7")
-                    field_widget.currentTextChanged.connect(lambda text: self.state.__setitem__(field["id"], text))
-                    pagelayout.addWidget(field_widget)
-        self.test_label_state = QLabel(str(self.state))
-        pagelayout.addWidget(self.test_label_state)
-       
-  #      for section in config.sections:
-   #         section_label = QLabel(section.name)
-    #        pagelayout.addWidget(section_label)
-#
- #           for field in section.fields:
-  #              if field.type == "text":
-   #                 field_widget = QLineEdit()
-    #                field_widget.setPlaceholderText(field.label)
-     #               field_widget.textChanged.connect(lambda text: self.state.__setitem__(field.id, text))
-      #              pagelayout.addWidget(field_widget)        
-
         
-
-
-
         self.setLayout(pagelayout)
         
-
+    def change_state(self, id: str, value: any):
+        self.state[id] = value
+        print(self.state)
