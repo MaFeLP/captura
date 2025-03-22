@@ -1,0 +1,94 @@
+\documentclass[a4paper]{scrartcl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                              Import Packages                              %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc}
+\usepackage[margin=60pt]{geometry}
+\usepackage[ngerman]{babel}
+{%- if multicol %}
+\usepackage{multicol}
+{%- endif %}
+\usepackage{csquotes}
+\usepackage{xcolor}
+{%- if chemie %}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+{%- endif %}
+{%- if math %}
+\usepackage{amsmath}
+\usepackage{amssymb}
+{%- endif %}
+\usepackage{graphicx}
+{%- if tikz %}
+\usepackage{pgfplots}
+\usepackage{tikz}
+{%- endif %}
+\usepackage{lastpage}
+
+% Use hyperlinks in the table of contents
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               Informations                                %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{ {{- title -}} }
+\author{ {{- author -}} }
+{% if use_today -%}
+\date{\today}
+{% else -%}
+\date{ {{- date -}} }
+{% endif -%}
+\pdfinfo{
+  /Title    ({{- title -}})
+  /Author   ({{- author -}})
+  /Creator  ({{- author -}})
+  /Producer ({{- author -}})
+  /Subject  ({{- subject -}})
+  /Keywords ({{- keywords | join(', ') -}})
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                            Header and Footer                              %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[singlespacing=true,headsepline,footsepline]{scrlayer-scrpage}
+\lohead{\textnormal{\textbf{ {{- subject -}} } --- {{ title -}} {{ '}}' }}
+\chead{}
+{% if use_today %}
+{%- raw -%}
+\rohead{\textnormal{\today}}
+{%- endraw -%}
+{% else %}
+\rohead{\textnormal{ {{- date -}} {{ '}}' }}
+{%- endif %}
+\lofoot{\textnormal{ {{- author -}} {{ '}}' }}
+\cfoot{}
+{% raw -%}
+\rofoot{\textnormal{Seite \arabic{page} von \pageref{LastPage}}}
+{%- endraw %}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                 Macros                                    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{% if mkline -%}
+\newcommand{\mkline}{\begin{center}\rule{0.5\textwidth}{0.4pt}\end{center} }
+{%- endif %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                Document                                   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\pagestyle{headings}
+\thispagestyle{headings}
+\section{ {{- title -}} }
+
+\end{document}
+

@@ -1,12 +1,12 @@
+from typing import Callable
+
 from PyQt6.QtWidgets import (
     QWidget,
-    QLineEdit,
     QPushButton,
     QLabel,
     QVBoxLayout,
-    QHBoxLayout,
 )
-from typing import Callable
+
 from captura.ui.config_widgets.LineEdit import LineEdit
 
 

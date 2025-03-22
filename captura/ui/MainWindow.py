@@ -1,12 +1,14 @@
 import logging
 
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QMainWindow, QApplication
 
 from captura.config import Config
 from captura.ui.Homepage import Homepage
 from captura.ui.MainScrollArea import MainScrollArea
 from captura.ui.Menubar import Menubar
 from captura.ui.Wizard import Wizard
+from captura.ui.dialog.FinalizeRenderDialog import FinalizeRenderDialog
 
 logger = logging.getLogger(__name__)
 
@@ -26,5 +28,10 @@ class MainWindow(QMainWindow):
         self.setMenuBar(Menubar(self))
 
     def navigate_to_wizard(self, config: Config):
-        wizard = Wizard(self, config)
+        QApplication.setOverrideCursor(Qt.CursorShape.ArrowCursor)
+        wizard = Wizard(self, config, self.goto_render)
         self.scroll_area.setWidget(wizard)
+
+    def goto_render(self, config: Config, state: dict):
+        dialog = FinalizeRenderDialog(self, config, state)
+        dialog.show()
