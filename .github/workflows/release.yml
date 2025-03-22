@@ -18,4 +18,5 @@ jobs:
           spec: 'captura/__main__.py'
           #requirements: 'src/requirements.txt'
           upload_exe_with_name: 'captura'
-          options: --onefile, --name "Captura", --windowed,
+          options: --onefile, --name "captura", --windowed, --add-data "captura/ui/assets:captura/ui/assets"
+
