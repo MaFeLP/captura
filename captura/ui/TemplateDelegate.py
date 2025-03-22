@@ -14,7 +14,7 @@ class TemplateDelegate(QFrame):
     HEIGHT = 300
 
     def __init__(
-            self, parent: QWidget, config: Config, load_template: Callable[[Config], None]
+        self, parent: QWidget, config: Config, load_template: Callable[[Config], None]
     ):
         super().__init__()
         self.parent = parent

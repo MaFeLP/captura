@@ -1,20 +1,23 @@
 import logging
 import math
+from typing import Callable
 
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QWidget, QGridLayout, QMessageBox
 
+from captura.config import Config
 from captura.template.library import get_library_templates
 from captura.ui.TemplateDelegate import TemplateDelegate
 from captura.util import import_new_template
 
 
 class Homepage(QWidget):
-    def __init__(self, parent: QWidget):
+    def __init__(self, parent: QWidget, navigate_to_wizard: Callable[[Config], None]):
         super().__init__()
 
         self.parent = parent
         self.logger = logging.getLogger(__name__)
+        self.navigate_to_wizard = navigate_to_wizard
         self.layout = QGridLayout()
 
         # Library will be initialized in self.load_templates()
@@ -43,9 +46,13 @@ class Homepage(QWidget):
         self.create_layout()
 
     def load_templates(self):
-        self.library_templates = get_library_templates()
+        self.library_templates = []
+        try:
+            self.library_templates = get_library_templates()
+        except Exception as e:
+            self.logger.error(f"Error loading templates: {e}")
         self.library_templates_widgets = [
-            TemplateDelegate(self.parent, config, lambda x: print(x))
+            TemplateDelegate(self.parent, config, self.navigate_to_wizard)
             for config in self.library_templates
         ]
         self.templates_per_row = math.floor(
