@@ -1,0 +1,57 @@
+name: "Mitschrift"
+description: "Eine normale Mitschrift für den Unterricht"
+id: "com.github.mafelp.mitschrift"
+version: "1.0.0"
+author: "MaFeLP <mafelp@proton.me>"
+license: "CC0"
+tags: [ "mitschirft", "unterricht" ]
+
+files:
+  - "index.tex"
+single_file: true
+
+sections:
+  - name: "Allgemeine Informationen"
+    description: "Allgemeine Informationen über das Dokument"
+    fields:
+      - id: "title"
+        label: "Titel"
+        type: "text"
+      - id: "author"
+        label: "Autor"
+        type: "text"
+      - id: "use_today"
+        label: "'\\today' als Datum verwenden?"
+        type: "checkbox"
+      - id: "date"
+        label: "Datum"
+        type: "text"
+      - id: "subject"
+        label: "Fach"
+        type: "text"
+      - id: "keywords"
+        label: "Weitere Keywords"
+        type: "list"
+
+  - name: "Makros"
+    description: "Makros, die im Dokument verwendet werden sollen"
+    fields:
+      - id: "mkline"
+        label: "mkline — Eine horizontale Linie erstellen"
+        type: "checkbox"
+
+  - name: "Extra Pakete"
+    description: "Extra Pakete, die geladen werden sollen"
+    fields:
+      - id: "multicol"
+        label: "multicol — mehrere Spalten"
+        type: "checkbox"
+      - id: "chemie"
+        label: "mhchem, chemfig — Pakete für die Chemie"
+        type: "checkbox"
+      - id: "math"
+        label: "amsmath, amssymb — Pakete für die Mathematik"
+        type: "checkbox"
+      - id: "tikz"
+        label: "tikz — Paket für Zeichnungen"
+        type: "checkbox"
