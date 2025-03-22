@@ -1,0 +1,9 @@
+title: Captura Dokumentation
+description: Create Templates and LaTeX files from these templates using a wizard!
+theme: just-the-docs
+
+url: https://mafelp.github.io/captura/
+
+aux_links:
+  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+
