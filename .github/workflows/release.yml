@@ -23,21 +23,35 @@ jobs:
           python3 -m pip install -r requirements.txt
           pipx install pyinstaller
           brew install create-dmg
+          brew install qt6
 
       - name: Create Application
         run: |
-          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
-          mv dist/captura/ ./captura.app/
+          pyinstaller --onedir --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
 
       - name: Create .dmg file
         run: |
+          cd dist
           create-dmg --volname "Captura" --window-pos 200 120 --window-size 800 450 --icon-size 100 --app-drop-link 600 185 captura.dmg ./captura.app
+
+      #- name: Create .dmg file
+      #  run: |
+      #    create-dmg \
+      #      --volname "Captura" \
+      #      --window-pos 200 120 \
+      #      --window-size 800 400 \
+      #      --icon-size 100 \
+      #      --icon "Captura.app" 200 190 \
+      #      --hide-extension "Captura.app" \
+      #      --app-drop-link 600 185 \
+      #      "Captura.dmg" \
+      #      "./captura.app"
 
       - name: Upload .dmg asset
         uses: 'actions/upload-artifact@v4'
         with:
           name: 'captura.dmg'
-          path: 'captura.dmg'
+          path: 'dist/captura.dmg'
 
   linux:
     runs-on: ubuntu-latest
@@ -53,19 +67,29 @@ jobs:
         run: |
           python3 -m pip install -r requirements.txt
           pipx install pyinstaller
+          sudo apt-get update && sudo apt-get install qt6 -y
 
       - name: Create Application
         run: |
-          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
-          mv ./dist/captura/ ./captura/
+          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" --collect-all PyQt6 captura/__main__.py
 
       - name: Create .tar.gz file
         run: |
+          cd ./dist/
           tar czf captura.tar.gz ./captura/
 
       - name: Upload .tar.gz asset
         uses: 'actions/upload-artifact@v4'
         with:
           name: 'captura.tar.gz'
-          path: 'captura.tar.gz'
+          path: 'dist/captura.tar.gz'
 
+#    - name: Upload DMG to Release
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ github.event.release.upload_url }}
+#        asset_path: ./${{ env.APP_NAME }}.dmg
+#        asset_name: ${{ env.APP_NAME }}.dmg
+#        asset_content_type: application/octet-stream
