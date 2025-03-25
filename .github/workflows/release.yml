@@ -4,32 +4,67 @@ on:
     tags: ['v*']
   workflow_dispatch:
 
-jobs:
-  pyinstaller-build:
-    strategy:
-      matrix:
-        opt: 
-          - os: ubuntu-latest
-            name: captura-linux
-          - os: windows-latest
-            name: captura-windows
-          - os: macos-latest
-            name: macos-latest
+permissions:
+  contents: read
 
-    runs-on: ${{ matrix.opt.os }}
+jobs:
+  macos:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: 'pip'
 
-      - name: Create Executable
-        uses: sayyid5416/pyinstaller@v1
+      - name: Install dependencies
+        run: |
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install pyinstaller
+
+      - name: Create Application
+        run: |
+          python -m pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          mv dist/captura/ ./captura.app/
+
+      - name: Create .dmg file
+        run: |
+          create-dmg --volname "Captura" --window-pos 200 120 --window-size 800 450 --icon-size 100 --app-drop-link 600 185 captura.dmg ./captura.app
+
+      - name: Upload .dmg asset
+        uses: 'actions/upload-artifact@v4'
         with:
-          python_ver: '3.12'
-          spec: 'captura/__main__.py'
-          requirements: 'requirements.txt'
-          upload_exe_with_name: ${{ matrix.opt.name }}
-          options: --onefile, --name "captura", --windowed, --add-data "captura/ui/assets:captura/ui/assets"
+          name: 'captura.dmg'
+          path: 'captura.dmg'
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install pyinstaller
+
+      - name: Create Application
+        run: |
+          python -m pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          mv ./dist/captura/ ./captura/
+
+      - name: Create .tar.gz file
+        run: |
+          tar czf captura.tar.gz ./captura/
+
+      - name: Upload .tar.gz asset
+        uses: 'actions/upload-artifact@v4'
+        with:
+          name: 'captura.tar.gz'
+          path: 'captura.tar.gz'
 
