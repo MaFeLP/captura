@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install -r requirements.txt
-          pipx install pyinstaller
+          python3 -m pip install pyinstaller
           brew install create-dmg
           brew install qt6
 
@@ -66,12 +66,12 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install -r requirements.txt
-          pipx install pyinstaller
-          sudo apt-get update && sudo apt-get install qt6 -y
+          python3 -m pip install pyinstaller pyxdg
+          #sudo apt-get update && sudo apt-get install qt6-base-dev -y
 
       - name: Create Application
         run: |
-          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" --collect-all PyQt6 captura/__main__.py
+          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
 
       - name: Create .tar.gz file
         run: |
