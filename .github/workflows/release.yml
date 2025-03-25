@@ -21,11 +21,11 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install -r requirements.txt
-          python3 -m pip install pyinstaller
+          pipx install pyinstaller
 
       - name: Create Application
         run: |
-          python -m pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
           mv dist/captura/ ./captura.app/
 
       - name: Create .dmg file
@@ -51,11 +51,11 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install -r requirements.txt
-          python3 -m pip install pyinstaller
+          pipx install pyinstaller
 
       - name: Create Application
         run: |
-          python -m pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
           mv ./dist/captura/ ./captura/
 
       - name: Create .tar.gz file
