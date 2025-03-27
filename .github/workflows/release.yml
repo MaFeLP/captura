@@ -114,27 +114,11 @@ jobs:
         run: |
           pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
 
-      - name: Set up environment variables
-        run: |
-          echo "APP_NAME=YourAppName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "APP_VERSION=0.1.0.1" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Create WiX Source File
-        run: |
-          mv captura.wxs .\\dist\\captura\\captura.wxs
-          cd .\\dist\\captura
-          tree /F
-
-      - name: Compile MSI
-        run: |
-          cd .\\dist\\captura
-          candle.exe captura.wxs
-          light.exe captura.wixobj
-
       - name: Rename MSI
         run: |
+          mv .\\.github\\captura.wxs .\\dist\\captura\\captura.wxs
           cd .\\dist\\captura
-          Rename-Item product.msi "captura-installer.msi"
+          wix build -o captura-installer.msi .\captura.wxs
 
       - name: Upload .msi asset
         uses: 'actions/upload-artifact@v4'

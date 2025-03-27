@@ -1,0 +1,44 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <!-- Product definition -->
+    <Package Name="Captura" Language="1033" Version="1.0.0.0" Manufacturer="MaFeLP" UpgradeCode="07e578fd-e8b9-4feb-9422-0840eabb6ae7" InstallerVersion="200">
+        <SummaryInformation Description="Captura LaTeX Templates" Manufacturer="MaFeLP" />
+        <MediaTemplate EmbedCab="yes" />
+
+        <!-- Feature definition -->
+        <Feature Id="Main" Title="Captura" Level="1">
+            <ComponentGroupRef Id="MainExecutable" />
+            <ComponentGroupRef Id="InternalLibs" />
+            <ComponentRef Id="ApplicationShortcuts" />
+        </Feature>
+
+        <!-- Upgrade and remove previous versions handling -->
+        <MajorUpgrade DowngradeErrorMessage="A newer version of Captura is already installed." />
+
+        <StandardDirectory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLLOCATION" Name="!(bind.Property.ProductName)">
+                <Directory Id="INTERNALLIBSFOLDER" Name="_internal" />
+            </Directory>
+        </StandardDirectory>
+
+        <ComponentGroup Id="MainExecutable" Directory="INSTALLLOCATION" >
+            <Component>
+                <File Id="CaptraExe" Name="captura.exe" Source="captura.exe" Vital="yes" />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="InternalLibs" Directory="INTERNALLIBSFOLDER" >
+            <Files Include="_internal\**" />
+        </ComponentGroup>
+
+        <!-- Start Menu Shortcut -->
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="Captura">
+                <Component Id="ApplicationShortcuts" Guid="07a51708-eaee-496e-a583-ddd31918f10d">
+                    <Shortcut Id="ApplicationStartMenuShortcut" Name="Captura" Description="Screen Capture Application" Target="[INSTALLLOCATION]captura.exe" WorkingDirectory="INSTALLLOCATION" />
+                    <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                    <RegistryValue Root="HKCU" Key="Software\Captura" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+                </Component>
+            </Directory>
+        </StandardDirectory>
+        </Package>
+</Wix>
+
