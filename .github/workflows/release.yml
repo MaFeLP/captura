@@ -109,12 +109,13 @@ jobs:
         run: |
           python3 -m pip install -r requirements.txt
           python3 -m pip install pyinstaller
+          dotnet tool install --global wix
 
       - name: Create Application
         run: |
           pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
 
-      - name: Rename MSI
+      - name: Create Installer .msi
         run: |
           mv .\\.github\\captura.wxs .\\dist\\captura\\captura.wxs
           cd .\\dist\\captura
