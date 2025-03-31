@@ -57,7 +57,7 @@ jobs:
       #      "./captura.app"
 
       - name: Create standalone file
-        run:
+        run: |
           rm -rf dist
           pyinstaller --onefile --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
           mv ./dist/captura ./captura_macos_standalone.bin
@@ -144,9 +144,9 @@ jobs:
 
       - name: Setup environment
         run: |
-          "__version__ = \"${{ github.event.inputs.version }}\"" | Out-File -FilePath "captura/__init__.py"
-          "production = True" | Out-File -Append -FilePath "captura/__init__.py"
-          "environment = \"linux\"" | Out-File -Appen -FilePath "captura/__init__.py"
+          '__version__ = "${{ github.event.inputs.version }}"' | Out-File -FilePath "captura/__init__.py"
+          'production = True' | Out-File -Append -FilePath "captura/__init__.py"
+          'environment = "linux"' | Out-File -Appen -FilePath "captura/__init__.py"
           (Get-Content .github\captura.wxs).Replace('[[VERSION]]', '${{ github.event.inputs.version }}') | Set-Content .github\captura.wxs
 
       - name: Create Application
