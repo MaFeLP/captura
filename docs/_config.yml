@@ -1,8 +1,10 @@
-title: Captura Dokumentation
+title: Captura
 description: Create Templates and LaTeX files from these templates using a wizard!
 theme: just-the-docs
 
 url: https://mafelp.github.io/captura/
+
+favicon_ico: "/favicon.svg"
 
 exclude:
   - 'vendor'
@@ -15,20 +17,10 @@ collections:
 just_the_docs:
   collections:
     api:
-      name: API Documentation
-
+      name: Python Documentation
 
 aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+  View on GitHub: https://github.com/MaFeLP/captura/
 
-# Enable or disable the side/mobile menu globally
-# Nav menu can also be selectively enabled or disabled using page variables or the minimal layout
 nav_enabled: true
-
-# External navigation links
-#nav_external_links:
-#  - title: API Documentation
-#    url: https://mafelp.github.io/captura/api/captura.html
-#    hide_icon: false # set to true to hide the external link icon - defaults to false
-#    opens_in_new_tab: false # set to true to open this link in a new tab - defaults to false
 
