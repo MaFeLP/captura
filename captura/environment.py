@@ -1,7 +1,8 @@
 import sys
 from pathlib import Path
 
-template_directory = Path.home() / ".captura" / "templates"
+template_directory: Path = Path.home() / ".captura" / "templates"
+"""The directory where templates are stored."""
 
 # Change on linux to use the XDG Base Directory Specification
 if sys.platform == "linux" or sys.platform == "linux2":

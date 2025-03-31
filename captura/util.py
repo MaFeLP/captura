@@ -10,7 +10,15 @@ from captura.template.library import load_new_template
 
 def error_exit(
     parent: QWidget, msg: str, e: Exception, exit_code: int, logger: logging.Logger
-):
+) -> None:
+    """Exits the application, but shows an error message beforehand.
+
+    :param parent: The parent element that will be used by PyQt
+    :param msg: The message that will be shown to the user
+    :param e: The exception that was raised
+    :param exit_code: The exit code for the application
+    :param logger: The logger object to log the error message
+    """
     logger.critical(msg, exc_info=e)
     QMessageBox.critical(parent, "Error", msg + f"\n\n{e}")
     QCoreApplication.exit(exit_code)
@@ -18,7 +26,13 @@ def error_exit(
 
 def import_new_template(
     parent: QWidget, reload_homepage: Callable[[], None], logger: logging.Logger
-):
+) -> None:
+    """Imports a new template into the library location
+
+    :param parent: The parent QWidget that will be used by PyQt to display dialogs
+    :param reload_homepage: The function that will be called to reload the homepage
+    :param logger: The logger object to log messages
+    """
     file_path, _ = QFileDialog.getOpenFileName(
         filter="Captura Vorlagen (*.captura);; ZIP-Dateien (*.zip);; Alle Dateien (*)",
     )
