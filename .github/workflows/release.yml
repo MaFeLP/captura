@@ -1,10 +1,14 @@
 name: release
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (format: "x.y.z")'
+        required: true
+        default: '0.0.0'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   macos:
@@ -25,9 +29,9 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo "__version__ = \"${{ github.event.release.tag_name }}\"" > captura/__init__.py
-          echo "production = True" >> captura/__init__.py
-          echo "environment = \"macos\"" >> captura/__init__.py
+          echo '__version__ = "${{ github.event.inputs.version }}"' > captura/__init__.py
+          echo 'production = True' >> captura/__init__.py
+          echo 'environment = "macos"' >> captura/__init__.py
 
       - name: Create Application
         run: |
@@ -37,10 +41,7 @@ jobs:
         run: |
           cd dist
           create-dmg --volname "Captura" --window-pos 200 120 --window-size 800 450 --icon-size 100 --app-drop-link 600 185 captura.dmg ./captura.app
-
-      - name: Create standalone file
-        run:
-          pyinstaller --onefile --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          mv captura.dmg ../captura.dmg
 
       #- name: Create .dmg file
       #  run: |
@@ -55,25 +56,24 @@ jobs:
       #      "captura.dmg" \
       #      "./captura.app"
 
-      - name: Upload DMG to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./dist/captura.dmg
-          asset_name: captura_macos.dmg
-          asset_content_type: application/octet-stream
+      - name: Create standalone file
+        run:
+          rm -rf dist
+          pyinstaller --onefile --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          mv ./dist/captura ./captura_macos_standalone.bin
 
-      - name: Upload Standalone binary to Release
-        uses: actions/upload-release-asset@v1
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./dist/captura
-          asset_name: captura_macos_standalone.bin
-          asset_content_type: application/octet-stream
+          files: |
+            ./captura.dmg
+            ./captura_macos_standalone.bin
+          draft: true
+          tag_name: v${{ github.event.inputs.version }}
+          name: Captura v${{ github.event.inputs.version }}
+          generate_release_notes: true
 
   linux:
     runs-on: ubuntu-latest
@@ -92,43 +92,39 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo "__version__ = \"${{ github.event.release.tag_name }}\"" > captura/__init__.py
-          echo "production = True" >> captura/__init__.py
-          echo "environment = \"linux\"" >> captura/__init__.py
+          echo '__version__ = "${{ github.event.inputs.version }}"' > captura/__init__.py
+          echo 'production = True' >> captura/__init__.py
+          echo 'environment = "linux"' >> captura/__init__.py
+
 
       - name: Create Application
         run: |
           pyinstaller --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
 
-      - name: Create .tar.gz file
+      - name: Create .tar.xz file
         run: |
           cd ./dist/
-          tar czf captura.tar.gz ./captura/
-
-      - name: Upload tarball to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./dist/captura.tar.gz
-          asset_name: captura_linux.tar.gz
-          asset_content_type: application/octet-stream
+          tar czf captura.tar.xz ./captura/
+          mv captura.tar.xz ../captura.tar.xz
 
       - name: Create standalone file
         run: |
+          rm -rf dist
           pyinstaller --name captura --windowed --onefile --add-data "captura/ui/assets:assets" captura/__main__.py
+          mv ./dist/captura ./captura_linux_standalone.bin
 
-      - name: Upload Standalone binary to Release
-        uses: actions/upload-release-asset@v1
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./dist/captura_linux
-          asset_name: captura_linux
-          asset_content_type: application/octet-stream
-
+          files: |
+            ./captura.tar.xz
+            ./captura_linux_standalone.bin
+          draft: true
+          tag_name: v${{ github.event.inputs.version }}
+          name: Captura v${{ github.event.inputs.version }}
+          generate_release_notes: true
 
   windows:
     runs-on: windows-latest
@@ -148,10 +144,10 @@ jobs:
 
       - name: Setup environment
         run: |
-          "__version__ = \"${{ github.event.release.tag_name }}\"" | Out-File -FilePath "captura/__init__.py"
+          "__version__ = \"${{ github.event.inputs.version }}\"" | Out-File -FilePath "captura/__init__.py"
           "production = True" | Out-File -Append -FilePath "captura/__init__.py"
           "environment = \"linux\"" | Out-File -Appen -FilePath "captura/__init__.py"
-          (Get-Content .github\captura.wxs).Replace('[[VERSION]]', '${{ github.event.release.tag_name }}') | Set-Content .github\captura.wxs
+          (Get-Content .github\captura.wxs).Replace('[[VERSION]]', '${{ github.event.inputs.version }}') | Set-Content .github\captura.wxs
 
       - name: Create Application
         run: |
@@ -159,30 +155,26 @@ jobs:
 
       - name: Create Installer .msi
         run: |
-          mv .\\.github\\captura.wxs .\\dist\\captura\\captura.wxs
-          cd .\\dist\\captura
+          Move-Item -Path .\.github\captura.wxs -Destination .\dist\captura\captura.wxs
+          cd .\dist\captura
           wix build -o captura-installer.msi .\captura.wxs
-
-      - name: Upload windows installer to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./dist/captura-installer.msi
-          asset_name: captura-installer.msi
-          asset_content_type: application/octet-stream
+          Move-Item -Path captura-installer.msi -Destination ..\..\captura_installer.msi
 
       - name: Create standalone Application
         run: |
+          Remove-Item -Recurse -Force .\dist
           pyinstaller --onefile --name captura --windowed --add-data "captura/ui/assets:assets" captura/__main__.py
+          Move-Item -Path .\dist\captura.exe -Destination .\captura.exe
 
-      - name: Upload Standalone binary to Release
-        uses: actions/upload-release-asset@v1
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./dist/captura.exe
-          asset_name: captura_portable.exe
-          asset_content_type: application/octet-stream
+          files: |
+            ./captura_installer.msi
+            ./captura.exe
+          draft: true
+          tag_name: v${{ github.event.inputs.version }}
+          name: Captura v${{ github.event.inputs.version }}
+          generate_release_notes: true
