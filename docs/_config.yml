@@ -4,6 +4,31 @@ theme: just-the-docs
 
 url: https://mafelp.github.io/captura/
 
+exclude:
+  - 'vendor'
+  - 'config'
+
+collections:
+  api:
+    output: true
+
+just_the_docs:
+  collections:
+    api:
+      name: API Documentation
+
+
 aux_links:
   Template Repository: https://github.com/just-the-docs/just-the-docs-template
+
+# Enable or disable the side/mobile menu globally
+# Nav menu can also be selectively enabled or disabled using page variables or the minimal layout
+nav_enabled: true
+
+# External navigation links
+#nav_external_links:
+#  - title: API Documentation
+#    url: https://mafelp.github.io/captura/api/captura.html
+#    hide_icon: false # set to true to hide the external link icon - defaults to false
+#    opens_in_new_tab: false # set to true to open this link in a new tab - defaults to false
 

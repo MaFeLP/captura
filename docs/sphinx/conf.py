@@ -18,9 +18,11 @@ extensions = [
   'sphinx.ext.autodoc',
   'sphinx.ext.viewcode',
   'sphinx.ext.napoleon',
+  'sphinx_markdown_builder'
 ]
 
 markdown_build_dir = '_build'
+markdown_docinfo = True
 
 templates_path = ['_templates']
 exclude_patterns = []
