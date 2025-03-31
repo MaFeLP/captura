@@ -1,11 +1,14 @@
 ---
-title: The Template Configuration
+title: Configuration
 layout: default
+parent: Template Creation
 ---
 
 # The Template Configruation
-The template configuration is split up into two parts: [Metadata]({% link metadata.md %}) about the template
-and [Section]({% link section.md %}) where the different parts of the wizard are defined.
+The template configuration is split up into two parts:
+
+1. [Metadata]({% link templates/config/metadata.md %}) about the template and
+2. [Section]({% link templates/config/section.md %}) where the different parts of the wizard are defined.
 
 ## Sample Configuration
 ```yaml
@@ -92,6 +95,7 @@ sections:
 
 ## Sample `index.tex` file for the config above
 ```tex
+{%- raw %}
 \documentclass{article}
 \usepackage{lipsum}
 
@@ -120,6 +124,6 @@ sections:
 
 \lipsum
 
-\end{document}
+\end{document}{% endraw -%}
 ```
 

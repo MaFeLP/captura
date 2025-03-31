@@ -1,6 +1,7 @@
 ---
-title: Template Metadata
+title: Metadata
 layout: default
+parent: Configuration
 ---
 
 # Template Metadata

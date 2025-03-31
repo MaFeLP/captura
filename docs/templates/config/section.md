@@ -1,6 +1,7 @@
 ---
 title: Sections
 layout: default
+parent: Configuration
 ---
 
 # Sections in Templates
