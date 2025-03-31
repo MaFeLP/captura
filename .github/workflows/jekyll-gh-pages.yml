@@ -40,13 +40,13 @@ jobs:
           cache-version: 0 # Increment this number if you need to re-download cached gems
           working-directory: ./docs/
 
+      - name: Install poetry
+        run: pipx install poetry
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: 'poetry'
-
-      - name: Install poetry
-        run: pipx install poetry
 
       - name: Setup Pages
         id: pages
