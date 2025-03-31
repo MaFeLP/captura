@@ -31,6 +31,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -38,15 +39,31 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           cache-version: 0 # Increment this number if you need to re-download cached gems
           working-directory: ./docs/
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+
       - name: Build with Jekyll
-        # Outputs to the './_site' directory by default
         working-directory: ./docs/
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+
+      - name: Generate API documentation
+        run: |
+          python3 -m pip install -U sphinx 
+          cd ./docs/sphinx
+          sphinx-apidoc -o . ../../captura
+          sphinx-build -M html . _build
+          cd ..
+          mv ./sphinx/_build/html/ ./_site/api/
+
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3
