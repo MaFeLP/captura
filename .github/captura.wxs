@@ -1,6 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <!-- Product definition -->
-    <Package Name="Captura" Language="1033" Version="1.0.0.0" Manufacturer="MaFeLP" UpgradeCode="07e578fd-e8b9-4feb-9422-0840eabb6ae7" InstallerVersion="200">
+    <Package Name="Captura" Language="1033" Version="[[VERSION]].0" Manufacturer="MaFeLP" UpgradeCode="07e578fd-e8b9-4feb-9422-0840eabb6ae7" InstallerVersion="200">
         <SummaryInformation Description="Captura LaTeX Templates" Manufacturer="MaFeLP" />
         <MediaTemplate EmbedCab="yes" />
 
