@@ -10,6 +10,16 @@ logger = logging.getLogger(__name__)
 
 
 def __validate_field(obj: dict, path: list[str], name: str, field_type: Type) -> None:
+    """Valides a field in the config
+
+    :param obj: The object to check
+    :param path: The path that will be displayed in the error message to make error handling easier
+    :param name: The name of the field on the object parameter
+    :param field_type: The type of the field to check against
+
+    :raises KeyError: When the field is missing
+    :raises ValueError: When the field is of the wrong type
+    """
     if not name in obj:
         raise KeyError(f"Missing required field '{'.'.join(path)}.{name}'")
     if not isinstance(obj[name], field_type):
@@ -18,7 +28,15 @@ def __validate_field(obj: dict, path: list[str], name: str, field_type: Type) ->
         )
 
 
-def __validate_section(section: dict, section_idx) -> None:
+def __validate_section(section: dict, section_idx: int) -> None:
+    """Valides a section in the config
+
+    :param section: The section to check
+    :param section_idx: The list index of the section in the config
+
+    :raises KeyError: When a field is missing from the section
+    :raises ValueError: When a field is of the wrong type
+    """
     __validate_field(section, ["sections"], "name", str)
     __validate_field(section, ["sections"], "description", str)
     __validate_field(section, ["sections"], "fields", list)
