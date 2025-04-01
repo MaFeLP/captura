@@ -1,9 +1,26 @@
-title: Captura Dokumentation
+title: Captura
 description: Create Templates and LaTeX files from these templates using a wizard!
 theme: just-the-docs
 
 url: https://mafelp.github.io/captura/
 
+favicon_ico: "/favicon.svg"
+
+exclude:
+  - 'vendor'
+  - 'config'
+
+collections:
+  api:
+    output: true
+
+just_the_docs:
+  collections:
+    api:
+      name: Python Documentation
+
 aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+  View on GitHub: https://github.com/MaFeLP/captura/
+
+nav_enabled: true
 

@@ -41,4 +41,3 @@ zip -r ../com.example.test_template-1.0.0.captura .
 
 [config]: {% link templates/config/index.md %}
 [Jinja2]: https://jinja.palletsprojects.com/en/stable/
-

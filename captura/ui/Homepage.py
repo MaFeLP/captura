@@ -1,3 +1,5 @@
+"""Holds the homepage of the application. This is the first screen that the user sees when they open the application."""
+
 import logging
 import math
 from typing import Callable
@@ -12,7 +14,14 @@ from captura.util import import_new_template
 
 
 class Homepage(QWidget):
-    def __init__(self, parent: QWidget, navigate_to_wizard: Callable[[Config], None]):
+    def __init__(
+            self, parent: QWidget, navigate_to_wizard: Callable[[Config], None]
+    ) -> None:
+        """Initializes a new Homepage
+
+        :param parent: The parent widget
+        :param navigate_to_wizard: A function that will be called with a config object to navigate to the wizard and start it
+        """
         super().__init__()
 
         self.parent = parent
@@ -41,11 +50,13 @@ class Homepage(QWidget):
 
         self.create_layout()
 
-    def reload(self):
+    def reload(self) -> None:
+        """Reloads the homepage and the templates from disk"""
         self.load_templates()
         self.create_layout()
 
-    def load_templates(self):
+    def load_templates(self) -> None:
+        """Loads the templates from the disk/library and creates the widgets for them"""
         self.library_templates = []
         try:
             self.library_templates = get_library_templates()
@@ -59,7 +70,11 @@ class Homepage(QWidget):
             self.size().width() / TemplateDelegate.WIDTH
         )
 
-    def create_layout(self, templates_per_row: int = 3):
+    def create_layout(self, templates_per_row: int = 3) -> None:
+        """Creates the layout to display the templates in a grid on the hompage
+
+        :param templates_per_row: How many templates should be displayed per row
+        """
         idx, idy = 0, 0
         for template in self.library_templates_widgets:
             self.layout.removeWidget(template)
@@ -72,7 +87,11 @@ class Homepage(QWidget):
         self.layout.setColumnStretch(idy + 1, 1)
         self.setLayout(self.layout)
 
-    def resizeEvent(self, event: QResizeEvent):
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """The event that is called when the window is resized. This will update the layout of the templates to fit the new size
+
+        :param event: Event properties
+        """
         templates_per_row = math.floor(event.size().width() / TemplateDelegate.WIDTH)
 
         if self.templates_per_row == templates_per_row:

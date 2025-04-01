@@ -40,29 +40,26 @@ jobs:
           cache-version: 0 # Increment this number if you need to re-download cached gems
           working-directory: ./docs/
 
+      - name: Install poetry
+        run: pipx install poetry
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: 'pip'
+          cache: 'poetry'
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Install dependencies
+        run: poetry install
+
       - name: Build with Jekyll
-        working-directory: ./docs/
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        run: |
+          poetry run bash ./docs/build_docs.sh "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
-
-      - name: Generate API documentation
-        run: |
-          python3 -m pip install -U sphinx 
-          cd ./docs/sphinx
-          sphinx-apidoc -o . ../../captura
-          sphinx-build -M html . _build
-          cd ..
-          mv ./sphinx/_build/html/ ./_site/api/
 
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
@@ -81,3 +78,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
