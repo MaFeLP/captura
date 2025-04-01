@@ -1,9 +1,10 @@
+import os
 import sys
 
 import jinja2
 import yaml
 from PyQt6.QtCore import PYQT_VERSION_STR, QT_VERSION_STR, Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QFont, QPixmap
 from PyQt6.QtWidgets import (
     QDialog,
     QWidget,
@@ -37,7 +38,15 @@ class AboutDialog(QDialog):
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setFont(QFont("Arial", 24))
         app_logo = QLabel()
-        app_logo.setPixmap(QIcon.fromTheme("template").pixmap(32, 32))
+        app_pixmap = QPixmap(
+            f"{os.path.dirname(__file__)}/../assets/logo_512x512.png"
+        ).scaled(
+            64,
+            64,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        app_logo.setPixmap(app_pixmap)
         name_layout = QHBoxLayout()
         name_layout.addWidget(app_logo)
         name_layout.addWidget(title)

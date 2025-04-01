@@ -1,4 +1,5 @@
 import logging
+import os
 
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import QMenuBar, QApplication, QWidget, QMessageBox
@@ -26,7 +27,7 @@ class Menubar(QMenuBar):
         help_action.triggered.connect(self.__not_implemented)
         help_menu.addAction(help_action)
 
-        about_action = QAction("&About", self)
+        about_action = QAction(QIcon(f"{os.path.dirname(__file__)}/assets/logo_512x512.png"), "&About", self)
         about_action.setStatusTip("Über Captura")
         about_action.triggered.connect(lambda: AboutDialog(self.parent).show())
         help_menu.addAction(about_action)

@@ -3,6 +3,7 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 
+import captura
 from captura.ui.MainWindow import MainWindow
 
 if __name__ == "__main__":
@@ -16,7 +17,9 @@ if __name__ == "__main__":
     )
 
     logger = logging.getLogger(__name__)
-    logger.info("Starting Captura version %s" % "v0.0.1")
+    logger.info(f"Starting Captura version {captura.__version__}")
+    app.setApplicationVersion(captura.__version__)
+    app.setApplicationName("Captura")
 
     main_window = MainWindow()
     main_window.show()

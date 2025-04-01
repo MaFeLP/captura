@@ -1,6 +1,8 @@
 import logging
+import os
 
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QMainWindow, QApplication
 
 from captura.config import Config
@@ -26,6 +28,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.scroll_area)
 
         self.setMenuBar(Menubar(self))
+
+        self.setWindowIcon(QIcon(f"{os.path.dirname(__file__)}/assets/logo_512x512.png"))
 
     def navigate_to_wizard(self, config: Config):
         QApplication.setOverrideCursor(Qt.CursorShape.ArrowCursor)
