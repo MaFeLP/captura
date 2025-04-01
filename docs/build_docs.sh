@@ -33,5 +33,4 @@ EOF
 done
 
 sed -i "s/title: 'captura'/title: 'Module Information'/g" _api/modules.md
-bundle exec jekyll serve --watch --baseurl "${baseurl}"
-
+bundle exec jekyll build --baseurl "${baseurl}"
