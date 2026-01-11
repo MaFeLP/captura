@@ -66,4 +66,4 @@ def render_all(path: Path, config: Config, values: dict) -> None:
         logger.debug("Copying assets...")
         for asset in config.assets:
             logger.debug(f"Copying asset {asset}...")
-            shutil.copy(path / asset, path / asset)
+            shutil.copy(config.get_directory() / "files" / asset, path / asset)
